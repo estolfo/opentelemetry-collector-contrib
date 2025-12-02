@@ -20,6 +20,7 @@ Currently, this extension [can parse the following logs](#supported-log-types) i
 - [VPC flow logs](https://cloud.google.com/vpc/docs/about-flow-logs-records) (extension [mapping](#vpc-flow-logs))
 - [Cloud armor logs](https://docs.cloud.google.com/armor/docs/request-logging) (extension [mapping](#cloud-armor-logs))
 - [Proxy Network Load Balancer logs](https://docs.cloud.google.com/load-balancing/docs/tcp/tcp-ssl-proxy-logging-monitoring#log-records) (extension [mapping](#proxy-network-load-balancer-logs))
+- [External Network Load Balancer logs](https://cloud.google.com/load-balancing/docs/network/networklb-monitoring) (extension [mapping](#external-network-load-balancer-logs))
 
 For all others logs, the payload will be placed in the log record attribute. In this case, the following configuration options are supported:
 
@@ -126,6 +127,7 @@ Examples:
 - Audit Logs: `encoding.format: "gcp.auditlog"`
 - VPC Flow Logs: `encoding.format: "gcp.vpcflow"`
 - Proxy Network Load Balancer Logs: `encoding.format: "gcp.proxy-nlb"`
+- External Network Load Balancer Logs: `encoding.format: "gcp.external-nlb"`
 
 ### How encoding.format is determined
 
@@ -153,6 +155,7 @@ The following format values are supported in the `googlecloudlogentryencodingext
 | VPC Flow Logs | `vpcflow` | Virtual Private Cloud flow log records |
 | Armor Logs | `armorlog` | Google Cloud armor logs (security policies applied) |
 | Proxy Network Load Balancer Logs | `proxy-nlb` | Proxy Network Load Balancer connection logs |
+| External Network Load Balancer Logs | `external-nlb` | Passthrough External Network Load Balancer flow logs |
 
 ### Cloud Audit Logs
 
@@ -398,4 +401,30 @@ See the struct of the Cloud Audit Log payload in [AuditLog](https://cloud.google
 - `1` → `icmp`
 
 Resource labels such as `backend_name`, `network_name`, and `load_balancing_scheme` are surfaced automatically via the existing `gcp.label.*` attribute pattern.
+
+### External Network Load Balancer logs
+
+[External Network Load Balancer flow logs](https://cloud.google.com/load-balancing/docs/network/networklb-monitoring) (Passthrough Network Load Balancer) are mapped into OpenTelemetry attributes as follows:
+
+| Original field | Log record attribute |
+|---|---|
+| `connection.clientIp` | `client.address` |
+| `connection.clientPort` | `client.port` |
+| `connection.serverIp` | `server.address` |
+| `connection.serverPort` | `server.port` |
+| `connection.protocol` | `network.transport` (translated from IANA protocol number, e.g., `tcp`, `udp`, `icmp`) |
+| `startTime` | `gcp.load_balancing.external_nlb.connection.start_time` |
+| `endTime` | `gcp.load_balancing.external_nlb.connection.end_time` |
+| `bytesReceived` | `gcp.load_balancing.external_nlb.bytes_received` |
+| `bytesSent` | `gcp.load_balancing.external_nlb.bytes_sent` |
+| `packetsReceived` | `gcp.load_balancing.external_nlb.packets_received` |
+| `packetsSent` | `gcp.load_balancing.external_nlb.packets_sent` |
+| `rtt` | `gcp.load_balancing.external_nlb.rtt` |
+
+**Protocol translation**: The numeric protocol field from GCP is automatically translated to human-readable protocol names using the [IANA Protocol Numbers](https://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml) standard. Common values include:
+- `6` → `tcp`
+- `17` → `udp`
+- `1` → `icmp`
+
+Resource labels such as `backend_group_name`, `backend_network_name`, `forwarding_rule_name`, and `region` are surfaced automatically via the existing `gcp.label.*` attribute pattern.
 
