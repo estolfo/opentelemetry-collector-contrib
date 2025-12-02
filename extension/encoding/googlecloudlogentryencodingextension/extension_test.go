@@ -206,6 +206,11 @@ func TestPayloads(t *testing.T) {
 			logFilename:      "testdata/proxynlb/proxynlb-basic.json",
 			expectedFilename: "testdata/proxynlb/proxynlb-basic_expected.yaml",
 		},
+		{
+			name:             "external nlb log - basic",
+			logFilename:      "testdata/externalnlb/externalnlb-basic.json",
+			expectedFilename: "testdata/externalnlb/externalnlb-basic_expected.yaml",
+		},
 	}
 
 	extension := newTestExtension(t, Config{})

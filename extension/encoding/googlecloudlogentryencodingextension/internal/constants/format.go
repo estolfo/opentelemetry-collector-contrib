@@ -8,6 +8,7 @@ const (
 	FormatVPCFlowLog      = "vpcflow"
 	FormatLoadBalancerLog = "load-balancer"
 	FormatProxyNLBLog     = "proxy-nlb"
+	FormatExternalNLBLog  = "external-nlb"
 
 	FormatIdentificationTag = "encoding.format"
 
@@ -17,4 +18,5 @@ const (
 	GCPFormatVPCFlowLog      = GCPFormatPrefix + FormatVPCFlowLog
 	GCPFormatLoadBalancerLog = GCPFormatPrefix + FormatLoadBalancerLog
 	GCPFormatProxyNLBLog     = GCPFormatPrefix + FormatProxyNLBLog
+	GCPFormatExternalNLBLog  = GCPFormatPrefix + FormatExternalNLBLog
 )
