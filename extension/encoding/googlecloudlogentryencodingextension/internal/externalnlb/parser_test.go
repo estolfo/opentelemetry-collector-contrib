@@ -69,8 +69,8 @@ func TestHandleTimestamps(t *testing.T) {
 	handleTimestamps(timePtr(start), timePtr(end), attr)
 
 	require.Equal(t, map[string]any{
-		gcpExternalNLBConnectionStartTime: start.Format(time.RFC3339Nano),
-		gcpExternalNLBConnectionEndTime:   end.Format(time.RFC3339Nano),
+		gcpExternalNLBPacketsStartTime: start.Format(time.RFC3339Nano),
+		gcpExternalNLBPacketsEndTime:   end.Format(time.RFC3339Nano),
 	}, attr.AsRaw())
 }
 
@@ -118,8 +118,8 @@ func TestParsePayloadIntoAttributes(t *testing.T) {
 				string(semconv.ServerAddressKey):    "35.209.164.189",
 				string(semconv.ServerPortKey):       int64(80),
 				string(semconv.NetworkTransportKey): "tcp",
-				gcpExternalNLBConnectionStartTime:   "2025-11-17T22:21:57.480419Z",
-				gcpExternalNLBConnectionEndTime:     "2025-11-17T22:21:57.500505Z",
+				gcpExternalNLBPacketsStartTime:      "2025-11-17T22:21:57.480419Z",
+				gcpExternalNLBPacketsEndTime:        "2025-11-17T22:21:57.500505Z",
 				gcpExternalNLBBytesReceived:         int64(83),
 				gcpExternalNLBBytesSent:             int64(853),
 				gcpExternalNLBPacketsReceived:       int64(12),

@@ -23,13 +23,13 @@ const (
 
 	loadBalancerLogType = "type.googleapis.com/google.cloud.loadbalancing.type.ExternalNetworkLoadBalancerLogEntry"
 
-	gcpExternalNLBConnectionStartTime = "gcp.load_balancing.external_nlb.connection.start_time"
-	gcpExternalNLBConnectionEndTime   = "gcp.load_balancing.external_nlb.connection.end_time"
-	gcpExternalNLBBytesReceived       = "gcp.load_balancing.external_nlb.bytes_received"
-	gcpExternalNLBBytesSent           = "gcp.load_balancing.external_nlb.bytes_sent"
-	gcpExternalNLBPacketsReceived     = "gcp.load_balancing.external_nlb.packets_received"
-	gcpExternalNLBPacketsSent         = "gcp.load_balancing.external_nlb.packets_sent"
-	gcpExternalNLBRTT                 = "gcp.load_balancing.external_nlb.rtt"
+	gcpExternalNLBPacketsStartTime = "gcp.load_balancing.external_nlb.packets.start_time"
+	gcpExternalNLBPacketsEndTime   = "gcp.load_balancing.external_nlb.packets.end_time"
+	gcpExternalNLBBytesReceived    = "gcp.load_balancing.external_nlb.bytes_received"
+	gcpExternalNLBBytesSent        = "gcp.load_balancing.external_nlb.bytes_sent"
+	gcpExternalNLBPacketsReceived  = "gcp.load_balancing.external_nlb.packets_received"
+	gcpExternalNLBPacketsSent      = "gcp.load_balancing.external_nlb.packets_sent"
+	gcpExternalNLBRTT              = "gcp.load_balancing.external_nlb.rtt"
 )
 
 var (
@@ -122,10 +122,10 @@ func handleConnection(conn *connection, attr pcommon.Map) {
 
 func handleTimestamps(start, end *time.Time, attr pcommon.Map) {
 	if start != nil {
-		attr.PutStr(gcpExternalNLBConnectionStartTime, start.Format(time.RFC3339Nano))
+		attr.PutStr(gcpExternalNLBPacketsStartTime, start.Format(time.RFC3339Nano))
 	}
 
 	if end != nil {
-		attr.PutStr(gcpExternalNLBConnectionEndTime, end.Format(time.RFC3339Nano))
+		attr.PutStr(gcpExternalNLBPacketsEndTime, end.Format(time.RFC3339Nano))
 	}
 }
